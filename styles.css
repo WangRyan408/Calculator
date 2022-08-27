@@ -40,14 +40,18 @@ body {
 #display {
     outline: 1px solid;
     border-radius: 10px;
-    margin: 10px 5px 0 5px;
-    height: 10%;
+    margin: 10px 10px 0 10px;
+    height: 12%;
     text-align: right;
 }
 
-#prev, #current{
+.calc {
     
     margin-right: 5px;
+}
+
+#current {
+    margin-top: 10px; 
 }
 
 
@@ -78,8 +82,7 @@ body {
 
 
 #input {
-    /*outline: 1px solid;*/
-    margin: 35px 15px 0 15px;
+    margin: 25px 15px 0 15px;
     height: 60%;
     display: grid;
     grid-template-columns: repeat(4, 1fr);

@@ -9,11 +9,11 @@ body {
     vertical-align: middle;
     justify-content: center;
     align-items: center;
-    outline: 1px solid black;
+    
 }
 
 #title {
-    outline: 1px solid;
+    
     flex-direction: row;
     vertical-align: middle;
     justify-content: center;
@@ -26,6 +26,7 @@ body {
     height: 800px;
     width: 650px;
     outline: 1px solid black;
+    border-radius: 10px;
     background-color: burlywood;
     padding: 0;
     margin-top: 1px;
@@ -33,16 +34,65 @@ body {
     flex-direction: column;
     
     
+    
 }
 
 #display {
     outline: 1px solid;
+    border-radius: 10px;
     margin: 10px 5px 0 5px;
+    height: 10%;
+    text-align: right;
+}
+
+#prev, #current{
+    
+    margin-right: 5px;
+}
+
+
+#ac {
+    margin-top: 15px;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
     height: 10%;
 }
 
+.child {
+    height: 100%;
+    width: 45%;
+    margin: 0 auto;
+    
+}
+
+
+.delete {
+    height: 100%;
+    width: 100%;
+    font-size: 28px;
+}
+
+
+
+
 #input {
-    outline: 1px solid;
-    margin: 25px 15px 0 15px;
-    height: 80%;
+    /*outline: 1px solid;*/
+    margin: 35px 15px 0 15px;
+    height: 60%;
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    grid-template-rows: repeat(4, 1fr);
+    gap: 10px;
+}
+
+
+
+.btn {
+    height: 100%;
+    width: 100%;
+    border: 1px solid;
+    border-radius: 5px;
+    font-size: 45px;
 }

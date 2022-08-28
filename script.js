@@ -25,13 +25,13 @@ function evaluateInput(button) {
 
         //scuffed attempt at using regex to eval
         if (current.match(regex) !== null) {
-            temp = current;
+            temp = current.slice(0, -1);
             current = current[current.length - 1];
         }
-    return console.log(current);
+    return console.log(temp);
 }
 
-function currentCalc() {
+function currentCalc(temp) {
 
 
 

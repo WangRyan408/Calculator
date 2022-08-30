@@ -33,7 +33,7 @@ function evaluateInput(button) {
 
 
         current += button.textContent;
-        if (bigCalc.textContent == '0') {
+        if (bigCalc.textContent == '0' && !(button.textContent == 'Clear')) {
             bigCalc.textContent = button.textContent;
         }
 

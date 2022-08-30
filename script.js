@@ -33,7 +33,7 @@ function evaluateInput(button) {
 
 
         current += button.textContent;
-        if (bigCalc.textContent == '0' && !(button.textContent == 'Clear')) {
+        if (bigCalc.textContent == '0' && !(button.textContent == 'Clear') && !(button.textContent == '') && (button.getAttribute('data-num') != null)) {
             bigCalc.textContent = button.textContent;
         }
 
@@ -51,7 +51,7 @@ function evaluateInput(button) {
             }
 
         }
-        else {
+        else if (!(button.getAttribute('id') == 'backspace')){
             bigCalc.textContent += button.textContent;
         }
         //scuffed attempt at using regex to eval
@@ -63,7 +63,7 @@ function evaluateInput(button) {
             //Next operator
             current = current[current.length - 1];
         }
-    return console.log(button);
+    return console.log(bigCalc.textContent);
 }
 
 //

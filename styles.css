@@ -46,8 +46,9 @@ body {
 }
 
 .calc {
-    
+    outline: 1px solid;
     margin-right: 5px;
+    height: 20%;
 }
 
 #current {

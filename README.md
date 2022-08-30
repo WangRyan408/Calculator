@@ -1,2 +1,2 @@
 # Calculator
-Web-based browser.
+Web-based Calculator.

@@ -8,7 +8,8 @@ let current = '';
 let temp = '';
 let prev = '';
 
-const regex = /^\d+\W\d+\W$/;
+const regex = /^(-)?\d+(\.\d+)?\s\W\s\d+(\.\d+)?\s\W\s$/;
+const zeroDivision = /^(-)?\d+(\.\d+)?\s÷\s0\s\W\s$/
 
 function buttonListener() {
     for (let i = 0; i < btn.length; i++) {
@@ -32,13 +33,16 @@ function evaluateInput(button) {
         }
 
 
-        current += button.textContent;
+        
         if (bigCalc.textContent == '0' && !(button.textContent == 'Clear') && !(button.textContent == '') && (button.getAttribute('data-num') != null)) {
             bigCalc.textContent = button.textContent;
+            current += button.textContent;
+            button.textContent == 'Clear'
         }
 
         else if (button.textContent == 'Clear') {
             bigCalc.textContent = 0;
+            smallCalc.textContent = '';
             current = '';
         }
         else if (button.textContent == '' && bigCalc.textContent != '0') {
@@ -51,42 +55,66 @@ function evaluateInput(button) {
             }
 
         }
-        else if (!(button.getAttribute('id') == 'backspace')){
+        else if (!(button.getAttribute('id') == 'backspace') && !(button.textContent == 'Clear')){
+            current += button.textContent;
             bigCalc.textContent += button.textContent;
         }
         //scuffed attempt at using regex to eval
         if (current.match(regex) !== null) {
             
             //First Calculation - e.g. 9x5
-            temp = current.slice(0, -1);
-
+            temp = current.slice(0, -2);
+            
             //Next operator
-            current = current[current.length - 1];
+            var currentOp = current[current.length - 2];
+            current = calc(temp).toString();
+
+            if (temp.match(zeroDivision) !== null) {
+                bigCalc.textContent = 'Silly Goose';
+            }
+            else if (currentOp.includes("=")) {
+                smallCalc.textContent = bigCalc.textContent;
+                bigCalc.textContent = calc(temp).toString();
+                
+            } else {
+                smallCalc.textContent = current;
+                bigCalc.textContent = calc(temp).toString();
+
+            }
         }
-    return console.log(bigCalc.textContent);
+    return console.log(current);
 }
 
 //Parses and calculates a given equation
 function calc(str) {
     let arr = str.split(" ");
+    let num = 0;
     let firstNum = arr[0];
     let tempOp = arr[1];
     let secondNum = arr[2];
-    const operators = {
-        'x': '*',
+    
+    let operators = {
         '÷': '/',
-        '-': '-',
-        '+': '+'
-    };
-
-    switch(tempOp) {
-        case operators['x']:
-            
+        '×': '*',
     }
 
 
-    arr.splice(1, 1, operators[tempOp]);
+    switch(tempOp) {
+        case '×':
+            num = firstNum * secondNum;
+            break;
+        case '÷':
+            num = firstNum / secondNum;
+            break;
+        case '-':
+            num = firstNum - secondNum; 
+            break;
+        case '+':
+            num = Number(firstNum) + Number(secondNum);
+            break;
+    }
 
+    return num;
 
     
 }

@@ -66,13 +66,29 @@ function evaluateInput(button) {
     return console.log(bigCalc.textContent);
 }
 
-//
-function currentCalc() {
-    if (current == '=') {
-        return 
+//Parses and calculates a given equation
+function calc(str) {
+    let arr = str.split(" ");
+    let firstNum = arr[0];
+    let tempOp = arr[1];
+    let secondNum = arr[2];
+    const operators = {
+        'x': '*',
+        '÷': '/',
+        '-': '-',
+        '+': '+'
+    };
+
+    switch(tempOp) {
+        case operators['x']:
+            
     }
 
 
+    arr.splice(1, 1, operators[tempOp]);
+
+
+    
 }
 
 

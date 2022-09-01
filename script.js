@@ -9,7 +9,7 @@ let temp = '';
 let prev = '';
 
 const regex = /^(-)?\d+(\.\d+)?\s\W\s\d+(\.\d+)?\s\W\s$/;
-const zeroDivision = /^(-)?\d+(\.\d+)?\s÷\s0\s\W\s$/
+const zeroDivision = /^(-)?\d+(\.\d+)?\s÷\s0\s$/;
 
 function buttonListener() {
     for (let i = 0; i < btn.length; i++) {
@@ -32,12 +32,15 @@ function evaluateInput(button) {
             document.getElementById('backspace').removeAttribute('disabled');
         }
 
+       /* if (document.querySelector('#period').getAttribute('disabled') !== null) {
+            document.querySelector('#period').removeAttribute('disabled');
+        }*/
 
         
         if (bigCalc.textContent == '0' && !(button.textContent == 'Clear') && !(button.textContent == '') && (button.getAttribute('data-num') != null)) {
             bigCalc.textContent = button.textContent;
             current += button.textContent;
-            button.textContent == 'Clear'
+            //button.textContent == 'Clear'
         }
 
         else if (button.textContent == 'Clear') {
@@ -47,8 +50,10 @@ function evaluateInput(button) {
         }
         else if (button.textContent == '' && bigCalc.textContent != '0') {
             const deleteRegex = /.$/;
-            let str = bigCalc.textContent.replace(deleteRegex, '');
+            const testRegex = /(\d|\.|\s\W\s)$/;
+            let str = bigCalc.textContent.replace(testRegex, '');
             bigCalc.textContent = str;
+            current = str;
             if (bigCalc.textContent == '') {
                 bigCalc.textContent += '0';
                 document.getElementById('backspace').setAttribute('disabled', '');
@@ -56,8 +61,10 @@ function evaluateInput(button) {
 
         }
         else if (!(button.getAttribute('id') == 'backspace') && !(button.textContent == 'Clear')){
+            
             current += button.textContent;
             bigCalc.textContent += button.textContent;
+            
         }
         //scuffed attempt at using regex to eval
         if (current.match(regex) !== null) {
@@ -69,17 +76,20 @@ function evaluateInput(button) {
             var currentOp = current[current.length - 2];
             current = calc(temp).toString();
 
-            if (temp.match(zeroDivision) !== null) {
-                bigCalc.textContent = 'Silly Goose';
-            }
-            else if (currentOp.includes("=")) {
+            if (currentOp.includes("=")) {
+                if (temp.match(zeroDivision) !== null) {
+                    bigCalc.textContent = 'Silly Goose, you can\'t divide by zero!';
+                } else {
                 smallCalc.textContent = bigCalc.textContent;
                 bigCalc.textContent = calc(temp).toString();
-                
+                }
             } else {
+                if (temp.match(zeroDivision) !== null) {
+                    bigCalc.textContent = 'Silly Goose, you can\'t divide by zero!';
+                } else {
                 smallCalc.textContent = current;
                 bigCalc.textContent = calc(temp).toString();
-
+                }
             }
         }
     return console.log(current);
@@ -98,22 +108,37 @@ function calc(str) {
         '×': '*',
     }
 
-
-    switch(tempOp) {
-        case '×':
-            num = firstNum * secondNum;
-            break;
-        case '÷':
-            num = firstNum / secondNum;
-            break;
-        case '-':
-            num = firstNum - secondNum; 
-            break;
-        case '+':
-            num = Number(firstNum) + Number(secondNum);
-            break;
+    if (!str.includes('.')) {
+        switch(tempOp) {
+            case '×':
+                num = firstNum * secondNum;
+                break;
+            case '÷':
+                num = firstNum / secondNum;
+                break;
+            case '-':
+                num = firstNum - secondNum; 
+                break;
+            case '+':
+                num = Number(firstNum) + Number(secondNum);
+                break;
+        }
+    } else {
+        switch(tempOp) {
+            case '×':
+                num = ((firstNum * 1000) * (secondNum * 1000)) / 1000000;
+                break;
+            case '÷':
+                num = ((firstNum * 1000) / (secondNum * 1000)) / 1000;
+                break;
+            case '-':
+                num = firstNum - secondNum; 
+                break;
+            case '+':
+                num = Number(firstNum) + Number(secondNum);
+                break;
+        }
     }
-
     return num;
 
     

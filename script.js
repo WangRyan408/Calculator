@@ -3,12 +3,15 @@ const btn = document.querySelectorAll('.btn');
 const remove = document.querySelectorAll('.delete');
 const bigCalc = document.querySelector('#current');
 const smallCalc = document.querySelector('#prev');
+const period = document.querySelector('#period');
 
 let current = '';
 let temp = '';
 let prev = '';
 
-const regex = /^(-)?\d+(\.\d+)?\s\W\s\d+(\.\d+)?\s\W\s$/;
+//var periodArr = [];
+
+const regex = /^(-)?(\d+)?(\.\d+)?\s\W\s\d+(\.\d+)?\s\W\s$/;
 const zeroDivision = /^(-)?\d+(\.\d+)?\s÷\s0\s$/;
 
 function buttonListener() {
@@ -25,21 +28,16 @@ function buttonListener() {
 
 //Wow this is really fucking me in the ass
 function evaluateInput(button) {
-    /*if (button.getAttribute('data-num') == '') {
-        current += button.textContent;
-    }*/
+    
         if (document.getElementById('backspace').getAttribute('disabled') !== null) {
             document.getElementById('backspace').removeAttribute('disabled');
         }
 
-       /* if (document.querySelector('#period').getAttribute('disabled') !== null) {
-            document.querySelector('#period').removeAttribute('disabled');
-        }*/
-
-        
+      
         if (bigCalc.textContent == '0' && !(button.textContent == 'Clear') && !(button.textContent == '') && (button.getAttribute('data-num') != null)) {
             bigCalc.textContent = button.textContent;
             current += button.textContent;
+            
             //button.textContent == 'Clear'
         }
 
@@ -47,13 +45,15 @@ function evaluateInput(button) {
             bigCalc.textContent = 0;
             smallCalc.textContent = '';
             current = '';
+            
+            //periodArr = [];
         }
         else if (button.textContent == '' && bigCalc.textContent != '0') {
-            const deleteRegex = /.$/;
-            const testRegex = /(\d|\.|\s\W\s)$/;
-            let str = bigCalc.textContent.replace(testRegex, '');
+            const deleteRegex = /(\d|\.|\s\W\s)$/;
+            let str = bigCalc.textContent.replace(deleteRegex, '');
             bigCalc.textContent = str;
             current = str;
+            //periodArr.pop();
             if (bigCalc.textContent == '') {
                 bigCalc.textContent += '0';
                 document.getElementById('backspace').setAttribute('disabled', '');
@@ -61,10 +61,41 @@ function evaluateInput(button) {
 
         }
         else if (!(button.getAttribute('id') == 'backspace') && !(button.textContent == 'Clear')){
-            
-            current += button.textContent;
-            bigCalc.textContent += button.textContent;
-            
+            //Ex: 5.5 or -5.5       
+            const lastRegex = /^(-)?\d+(\.\d+\s)?\W\s/;
+            //Looks back to see if there's a number and a period
+            const decLookAround = /(?<=\d+\.\d+\s\W\s)/;
+            //Ex: 5.5 + 5.5
+            const regexRedux = /^(-)?\d+(\.\d+\s)?\W\s\d+$/;
+            if (current.match(lastRegex) == null) {
+                current += button.textContent;
+                bigCalc.textContent += button.textContent;
+                period.setAttribute('disabled', '');
+
+                
+            } else if (current.match(lastRegex) !== null) {
+                current += button.textContent;
+                bigCalc.textContent += button.textContent;
+                period.setAttribute('disabled', '');
+
+                
+            }
+/*
+            if (current.match(decLookAround) == null || button['textContent'] != '.'){
+                current += button.textContent;
+                
+                bigCalc.textContent += button.textContent;
+                period.setAttribute('disabled', '');
+            }
+            if (current.match(lastRegex) !== null) {
+                if (period.getAttribute('disabled') !== null) {
+                    period.removeAttribute('disabled');
+                }
+                else if (current.match(regexRedux) !== null) {
+                    period.setAttribute('disabled', '');
+                }
+            }
+            */
         }
         //scuffed attempt at using regex to eval
         if (current.match(regex) !== null) {
@@ -145,33 +176,14 @@ function calc(str) {
 }
 
 
-function calculate(a, b) {
-
-    function add(a, b) {
-        return a + b;
-    }
-
-    function subtract(a, b) {
-        return a - b;
-    }
-
-    function multiply(a, b) {
-        return a * b;
-    }
-
-    function divide(a, b) {
-        return a / b;
-    }
-
-}
-
 function buttonSize() {
     for (let i = 0; i < btn.length; i++) {
         btn[i].setAttribute('id', `btn-${i}`);
     }
 }
 
-
+period.setAttribute('disabled', '');
 buttonSize();
 buttonListener();
+period.setAttribute('disabled', '');
 //console.log(buttonListener());
